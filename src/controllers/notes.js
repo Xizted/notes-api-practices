@@ -1,4 +1,5 @@
 const Note = require('../models/Note');
+const User = require('../models/User');
 
 const getAllNotes = async (req, res, next) => {
   const notes = await Note.find({});
@@ -7,6 +8,9 @@ const getAllNotes = async (req, res, next) => {
 
 const createNote = async (req, res, next) => {
   const { title } = req.body;
+  const { userId } = req;
+
+  const user = await User.findById(userId);
 
   if (!title) {
     return res.status(400).send({
@@ -17,10 +21,17 @@ const createNote = async (req, res, next) => {
   const newNote = new Note({
     title,
     completed: false,
+    user: user._id,
   });
 
-  const noteSaved = await newNote.save();
-  res.status(201).send(noteSaved);
+  try {
+    const noteSaved = await newNote.save();
+    user.notes = [...user.notes, noteSaved._id];
+    await user.save();
+    res.status(201).send(noteSaved);
+  } catch (e) {
+    next(e);
+  }
 };
 
 const updateNote = (req, res, next) => {

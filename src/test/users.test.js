@@ -26,7 +26,7 @@ describe('creating a new user', () => {
     };
 
     await api
-      .post('/api/v1/users')
+      .post('/api/v1/auth/register')
       .send(newUser)
       .expect(201)
       .expect('Content-Type', /application\/json/);
@@ -50,7 +50,7 @@ describe('creating a new user', () => {
     };
 
     const result = await api
-      .post('/api/v1/users')
+      .post('/api/v1/auth/register')
       .send(newUser)
       .expect(400)
       .expect('Content-Type', /application\/json/);

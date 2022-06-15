@@ -5,6 +5,7 @@ const cors = require('cors');
 const morgan = require('morgan');
 const notFound = require('./middleware/notFound');
 const errorHandler = require('./middleware/errorHandler');
+const authRoute = require('./routes/auth');
 const notesRoute = require('./routes/notes');
 const usersRoute = require('./routes/users');
 
@@ -19,6 +20,7 @@ app.get('/', (req, res) => {
   res.status(200).send('<h1>Hola Mundo</h1>');
 });
 
+app.use('/api/v1/auth', authRoute);
 app.use('/api/v1/notes', notesRoute);
 app.use('/api/v1/users', usersRoute);
 
